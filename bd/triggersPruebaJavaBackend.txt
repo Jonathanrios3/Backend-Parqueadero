@@ -1,0 +1,55 @@
+trigger para restar puestos
+:
+---------------------//------------------------
+
+CREATE TRIGGER actualizarPuesto after insert on puestos
+
+for each row 
+
+BEGIN
+
+if(new.diponibilidadPuesto = 0)then
+update parqueadero
+
+set tamano = tamano-1
+
+where id = 1;  
+
+END IF;
+END;
+
+//
+
+---------------------//-----------------------
+
+trigger para sumar puestos y definir ingresos:
+
+----------------------//--------------------------
+CREATE TRIGGER sumarPuesto after update on puestos
+
+for each row 
+
+BEGIN
+
+if(new.diponibilidadPuesto = 1) then
+update parqueadero
+
+set tamano = tamano+1
+,
+ingresos = tarifa + ingresos
+where id = 1;
+END IF;
+END;
+
+//
+
+-------------------------//---------------------
+
+
+create trigger verificarPuestos before update on parqueadero 
+for each row
+begin
+if(new.tamano < 0)then 
+signal sqlstate '45000'; 
+end if;
+end;
